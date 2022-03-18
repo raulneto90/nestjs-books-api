@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { Book } from './models/Book';
+import { Book } from './entities/Book';
 
 @Injectable()
 export class BooksService {
-  private books: Book[] = [
-    new Book('LIV001', 'The Lord of the Rings', 19.99),
-    new Book('LIV002', 'The Hobbit', 9.99),
-    new Book('LIV003', 'The Silmarillion', 29.99),
-  ];
+  private books: Book[] = [];
 
   async findAll(): Promise<Book[]> {
     return this.books;

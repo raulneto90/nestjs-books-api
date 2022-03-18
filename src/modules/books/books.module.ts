@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { SequelizeModule } from '@nestjs/sequelize';
 
 import { BooksController } from './books.controller';
 import { BooksService } from './books.service';
+import { Book } from './entities/Book';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true })],
+  imports: [SequelizeModule.forFeature([Book])],
   controllers: [BooksController],
   providers: [BooksService],
   exports: [],
