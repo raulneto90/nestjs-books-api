@@ -26,13 +26,13 @@ export class BooksController {
   }
 
   @Post()
-  async create(book: Book): Promise<void> {
+  async create(@Body() book: Book): Promise<void> {
     return this.booksService.create(book);
   }
 
   @Put(':id')
   async update(@Param('id') id: number, @Body() book: Book): Promise<Book> {
-    return this.booksService.update(book);
+    return this.booksService.update(id, book);
   }
 
   @Delete(':id')
