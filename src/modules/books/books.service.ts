@@ -1,37 +1,35 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import { Inject, Injectable } from '@nestjs/common';
 
+import { BookDTO } from './dtos/BookDTO';
+import { CreateBookDTO } from './dtos/CreateBookDTO';
 import { Book } from './entities/Book';
+import { IBooksRepository } from './repositories/IBooksRepository';
+import { BooksRepository } from './repositories/implementations/BooksRepository';
 
 @Injectable()
 export class BooksService {
   constructor(
-    @InjectModel(Book)
-    private readonly booksModel: typeof Book,
+    @Inject(BooksRepository)
+    private readonly booksRepository: IBooksRepository,
   ) {}
 
-  async findAll(): Promise<Book[]> {
-    return this.booksModel.findAll();
+  async findAll(): Promise<BookDTO[]> {
+    return this.booksRepository.findAll();
   }
 
   async findOne(id: number): Promise<Book> {
-    return this.booksModel.findByPk(id);
+    return this.booksRepository.findById(id);
   }
 
-  async create(book: Book): Promise<void> {
-    await this.booksModel.create(book);
+  async create(data: CreateBookDTO): Promise<void> {
+    await this.booksRepository.create(data);
   }
 
-  async update(id: number, book: Book): Promise<Book> {
-    await this.booksModel.update(book, {
-      where: { id },
-    });
-
-    return this.findOne(book.id);
+  async update(id: number, book: Book): Promise<void> {
+    await this.booksRepository.update(id, book);
   }
 
   async remove(id: number): Promise<void> {
-    const book = await this.findOne(id);
-    await book.destroy();
+    await this.booksRepository.delete(id);
   }
 }
