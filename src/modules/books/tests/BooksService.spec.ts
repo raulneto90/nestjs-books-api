@@ -16,9 +16,13 @@ describe('BooksService', () => {
         .spyOn(BooksRepository.prototype, 'findByCode')
         .mockResolvedValue(null);
 
-      jest.spyOn(BooksRepository.prototype, 'create').mockResolvedValue(null);
+      jest
+        .spyOn(BooksRepository.prototype, 'create')
+        .mockResolvedValue(bookEntityMock());
 
-      expect(await booksService.create({ ...createBookMock() }));
+      const book = await booksService.create(createBookMock());
+
+      expect(book).toHaveProperty('id');
     });
 
     it('should not be able to create new book with same code', async () => {

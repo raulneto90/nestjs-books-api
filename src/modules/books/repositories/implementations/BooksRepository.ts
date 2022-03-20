@@ -1,6 +1,5 @@
 import { BookDTO } from '@modules/books/dtos/BookDTO';
 import { CreateBookDTO } from '@modules/books/dtos/CreateBookDTO';
-import { UpdateBookDTO } from '@modules/books/dtos/UpdateBookDTO';
 import { Book } from '@modules/books/entities/Book';
 import { InjectModel } from '@nestjs/sequelize';
 
@@ -12,8 +11,9 @@ export class BooksRepository implements IBooksRepository {
     private repository: typeof Book,
   ) {}
 
-  async create(data: CreateBookDTO): Promise<void> {
-    await this.repository.create(data);
+  async create(data: CreateBookDTO): Promise<BookDTO> {
+    const book = await this.repository.create(data);
+    return book;
   }
 
   async findAll(): Promise<BookDTO[]> {
@@ -28,11 +28,15 @@ export class BooksRepository implements IBooksRepository {
     return this.repository.findOne({ where: { code } });
   }
 
-  async update(id: number, data: UpdateBookDTO): Promise<void> {
+  async update(id: number, data: BookDTO): Promise<void> {
     await this.repository.update(data, { where: { id } });
   }
 
   async delete(id: number): Promise<void> {
     await this.repository.destroy({ where: { id } });
+  }
+
+  async truncateTable(): Promise<void> {
+    await this.repository.sequelize.query('DELETE FROM books');
   }
 }

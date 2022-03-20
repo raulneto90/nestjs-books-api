@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpException,
   HttpStatus,
   Param,
   Post,
@@ -14,6 +15,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BooksService } from './books.service';
 import { BookDTO } from './dtos/BookDTO';
 import { CreateBookDTO } from './dtos/CreateBookDTO';
+import { CreateBookResponseDTO } from './dtos/CreateBookResponseDTO';
 import { Book } from './entities/Book';
 
 @Controller('books')
@@ -37,8 +39,9 @@ export class BooksController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiResponse({ status: HttpStatus.CREATED })
-  async create(@Body() data: CreateBookDTO): Promise<void> {
+  @ApiResponse({ status: HttpStatus.CREATED, type: CreateBookResponseDTO })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: HttpException })
+  async create(@Body() data: CreateBookDTO): Promise<CreateBookResponseDTO> {
     return this.booksService.create(data);
   }
 

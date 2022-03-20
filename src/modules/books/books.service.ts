@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 
 import { BookDTO } from './dtos/BookDTO';
 import { CreateBookDTO } from './dtos/CreateBookDTO';
+import { CreateBookResponseDTO } from './dtos/CreateBookResponseDTO';
 import { IBooksRepository } from './repositories/IBooksRepository';
 import { BooksRepository } from './repositories/implementations/BooksRepository';
 
@@ -20,14 +21,15 @@ export class BooksService {
     return this.booksRepository.findById(id);
   }
 
-  async create(data: CreateBookDTO): Promise<void> {
+  async create(data: CreateBookDTO): Promise<CreateBookResponseDTO> {
     const bookExists = await this.booksRepository.findByCode(data.code);
 
     if (bookExists) {
-      throw new Error('Book already exists');
+      throw new HttpException('Book already exists', 400);
     }
 
-    await this.booksRepository.create(data);
+    const book = await this.booksRepository.create(data);
+    return { id: book.id };
   }
 
   async update(id: number, book: BookDTO): Promise<void> {
