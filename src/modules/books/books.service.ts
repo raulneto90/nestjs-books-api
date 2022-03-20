@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { BookDTO } from './dtos/BookDTO';
 import { CreateBookDTO } from './dtos/CreateBookDTO';
-import { Book } from './entities/Book';
 import { IBooksRepository } from './repositories/IBooksRepository';
 import { BooksRepository } from './repositories/implementations/BooksRepository';
 
@@ -17,7 +16,7 @@ export class BooksService {
     return this.booksRepository.findAll();
   }
 
-  async findOne(id: number): Promise<Book> {
+  async findOne(id: number): Promise<BookDTO> {
     return this.booksRepository.findById(id);
   }
 
@@ -31,7 +30,7 @@ export class BooksService {
     await this.booksRepository.create(data);
   }
 
-  async update(id: number, book: Book): Promise<void> {
+  async update(id: number, book: BookDTO): Promise<void> {
     await this.booksRepository.update(id, book);
   }
 

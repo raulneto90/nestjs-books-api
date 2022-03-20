@@ -16,11 +16,11 @@ export class BooksRepository implements IBooksRepository {
     await this.repository.create(data);
   }
 
-  async findAll(): Promise<Book[]> {
+  async findAll(): Promise<BookDTO[]> {
     return this.repository.findAll();
   }
 
-  async findById(id: number): Promise<Book> {
+  async findById(id: number): Promise<BookDTO> {
     return this.repository.findByPk(id);
   }
 
@@ -33,7 +33,6 @@ export class BooksRepository implements IBooksRepository {
   }
 
   async delete(id: number): Promise<void> {
-    const book = await this.findById(id);
-    await book.destroy();
+    await this.repository.destroy({ where: { id } });
   }
 }

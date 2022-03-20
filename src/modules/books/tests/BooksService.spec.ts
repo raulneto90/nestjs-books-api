@@ -31,4 +31,50 @@ describe('BooksService', () => {
       ).rejects.toBeInstanceOf(Error);
     });
   });
+
+  describe('findAll()', () => {
+    it('should be able to find books', async () => {
+      jest
+        .spyOn(BooksRepository.prototype, 'findAll')
+        .mockResolvedValue([bookEntityMock()]);
+
+      const books = await booksService.findAll();
+
+      expect(books).toHaveLength(1);
+      expect.arrayContaining(books);
+    });
+  });
+
+  describe('findOne()', () => {
+    it('should be able to find one book', async () => {
+      const existingBook = bookEntityMock();
+
+      jest
+        .spyOn(BooksRepository.prototype, 'findById')
+        .mockResolvedValue(existingBook);
+
+      const book = await booksService.findOne(1);
+
+      expect(book).toMatchObject(existingBook);
+    });
+  });
+
+  describe('update()', () => {
+    it('should be able to update one book', async () => {
+      const existingBook = bookEntityMock();
+      existingBook.name = 'Updated Book';
+
+      jest.spyOn(BooksRepository.prototype, 'update').mockResolvedValue(null);
+
+      expect(await booksService.update(1, existingBook));
+    });
+  });
+
+  describe('remove()', () => {
+    it('should be able to remove one book', async () => {
+      jest.spyOn(BooksRepository.prototype, 'delete').mockResolvedValue(null);
+
+      expect(await booksService.remove(1));
+    });
+  });
 });

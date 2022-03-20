@@ -31,7 +31,7 @@ export class BooksController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ status: HttpStatus.OK, type: BookDTO })
-  async show(@Param('id') id: number): Promise<Book> {
+  async show(@Param('id') id: number): Promise<BookDTO> {
     return this.booksService.findOne(id);
   }
 
