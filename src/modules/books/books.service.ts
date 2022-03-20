@@ -22,6 +22,12 @@ export class BooksService {
   }
 
   async create(data: CreateBookDTO): Promise<void> {
+    const bookExists = await this.booksRepository.findByCode(data.code);
+
+    if (bookExists) {
+      throw new Error('Book already exists');
+    }
+
     await this.booksRepository.create(data);
   }
 

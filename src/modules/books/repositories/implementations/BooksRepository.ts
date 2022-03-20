@@ -1,3 +1,4 @@
+import { BookDTO } from '@modules/books/dtos/BookDTO';
 import { CreateBookDTO } from '@modules/books/dtos/CreateBookDTO';
 import { UpdateBookDTO } from '@modules/books/dtos/UpdateBookDTO';
 import { Book } from '@modules/books/entities/Book';
@@ -21,6 +22,10 @@ export class BooksRepository implements IBooksRepository {
 
   async findById(id: number): Promise<Book> {
     return this.repository.findByPk(id);
+  }
+
+  async findByCode(code: string): Promise<BookDTO> {
+    return this.repository.findOne({ where: { code } });
   }
 
   async update(id: number, data: UpdateBookDTO): Promise<void> {
